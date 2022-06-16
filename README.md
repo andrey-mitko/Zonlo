@@ -12,6 +12,8 @@
 - TailwindCSS
 - Next.js
 - React.js
+- Stripe
+- Sendgrid
 
 ## 🤝 Support
 
