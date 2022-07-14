@@ -93,7 +93,7 @@ async function deleteListing(customerIdProp: string, subscriptionIdProp: string,
     
       let { db } = await connectToDatabase(mongoDbUri, mongoDb);
 
-      await db.collection('InternshipListings').deleteOne(filter)
+      await db.collection('InternshipListingsNew').deleteOne(filter)
       .then((res: any) => {
           return JSON.parse(JSON.stringify(res));
       })

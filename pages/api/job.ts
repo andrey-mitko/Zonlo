@@ -49,7 +49,7 @@ async function getJob(req: NextApiRequest, res: NextApiResponse<Response>) {
         // connect to the database
         let { db } = await connectToDatabase(mongoDbUri, mongoDb);
         // fetch the post
-        let jobListings = await db.collection('InternshipListings').find(searchTerm).sort({_id: 1}).toArray();
+        let jobListings = await db.collection('InternshipListingsNew').find(searchTerm).sort({_id: 1}).toArray();
         let jobListing = jobListings[0]
         // return the posts
         return res.json({

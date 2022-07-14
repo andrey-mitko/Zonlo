@@ -57,7 +57,7 @@ async function getJobs(req: NextApiRequest, res: NextApiResponse<Response>) {
         // fetch the posts
         let jobListings = (searchString !== "") ? 
         (await db
-            .collection('InternshipListings')
+            .collection('InternshipListingsNew')
             .find( {$or: [
                 {'title': {'$regex': searchString, '$options': 'i'}},
                 {'employer.name': {'$regex': searchString, '$options': 'i'}},
@@ -68,7 +68,7 @@ async function getJobs(req: NextApiRequest, res: NextApiResponse<Response>) {
             .toArray()
         ) :
         (await db
-            .collection('InternshipListings')
+            .collection('InternshipListingsNew')
             .find({})
             .sort({_id: 1})
             .skip(skip)
@@ -124,7 +124,7 @@ async function editListing(req: NextApiRequest, res: NextApiResponse<Response>) 
 
 
         let { db } = await connectToDatabase(mongoDbUri, mongoDb);
-        await db.collection('InternshipListings').updateOne(filter, updateDoc, options)
+        await db.collection('InternshipListingsNew').updateOne(filter, updateDoc, options)
             .then((res: any) => {
                 return JSON.parse(JSON.stringify(res));
             })
@@ -163,7 +163,7 @@ async function deleteListing(req: NextApiRequest, res: NextApiResponse<Response>
             body.subscriptionId
           );
         if (deleted.status === 'canceled') {
-            await db.collection('InternshipListings').deleteOne(filter)
+            await db.collection('InternshipListingsNew').deleteOne(filter)
             .then((res: any) => {
                 return JSON.parse(JSON.stringify(res));
             })
@@ -231,11 +231,11 @@ async function createListing(req: NextApiRequest, res: NextApiResponse<Response>
         let { db } = await connectToDatabase(mongoDbUri, mongoDb);
 
         // Check if already created
-        const count = await db.collection('InternshipListings').countDocuments({ $and: [{'employer.customerId': listing.employer.customerId}, {'employer.subscriptionId': listing.employer.subscriptionId}]}, { limit: 1 }) 
+        const count = await db.collection('InternshipListingsNew').countDocuments({ $and: [{'employer.customerId': listing.employer.customerId}, {'employer.subscriptionId': listing.employer.subscriptionId}]}, { limit: 1 }) 
         // returns 1 if exists and 0 otherwise
         
         if (count === 0) {
-            let createResponse = db.collection('InternshipListings').insertOne(listing)
+            let createResponse = db.collection('InternshipListingsNew').insertOne(listing)
             createResponse
                 .then((res: any) => {
                     return JSON.parse(JSON.stringify(res));
