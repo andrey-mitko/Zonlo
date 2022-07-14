@@ -6,6 +6,10 @@
 
 - [View Live Website](https://zonlo.vercel.app "Live View")
 
+## 📺 Demo
+
+![Website Demo](public/demo.gif)
+
 ## 🛠 Built With
 
 - TypeScript
