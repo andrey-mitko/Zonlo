@@ -8,6 +8,7 @@ const mongoDb = process.env.DB_NAME
 const sendgridApi = process.env.SENDGRID_API
 
 import Stripe from 'stripe';
+import { CONFIG as MAIL_CONFIG, sendMail } from '../../lib/nodemailer';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_LIVE!, {
   apiVersion: '2020-08-27'
@@ -269,17 +270,12 @@ async function createListing(req: NextApiRequest, res: NextApiResponse<Response>
 }
 
 async function sendConfirmationEmail(jobListing: JobListing, res: NextApiResponse<Response>, json: string) {
-    sgMail.setApiKey(sendgridApi)
-
-    const msg = {
-    to: jobListing.employer.primaryEmail, 
-    from: {email: 'andrey@zonlo.co.uk', name:'Andrey from Zonlo'},
-    subject: 'Zonlo - Purchase Confirmation and Edit Link',
-    html: `<strong>Thank you for purchasing a Zonlo listing :)</strong> <br> Here is a link to manage your listing;  please store it somewhere safe as we cannot and will not resent it. Thanks! <br> <a href="https://zonlo.vercel.app/manage/${jobListing.editId}">https://zonlo.vercel.app/manage/${jobListing.editId}</a>`,
-    }
-
-    sgMail
-    .send(msg)
+    await sendMail({
+        to: jobListing.employer.primaryEmail,
+        from: MAIL_CONFIG.from,
+        subject: `Zonlo - Purchase Confirmation and Edit Link`,
+        html:`<strong>Thank you for purchasing a Zonlo listing :)</strong> <br> Here is a link to manage your listing;  please store it somewhere safe as we cannot and will not resent it. Thanks! <br> <a href="https://zonlo.vercel.app/manage/${jobListing.editId}">https://zonlo.vercel.app/manage/${jobListing.editId}</a>`,
+      })
     .then((response: any) => {
         return res.json({
             message: json,
