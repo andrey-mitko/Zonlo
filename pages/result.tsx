@@ -20,7 +20,9 @@ const Result = (props: Props) => {
 
   useEffect(() => {
     // Update the document title using the browser API
-    addListingToDB();
+    if (!isLoading && !isListingCreated) {
+      addListingToDB();
+    }
   }, []);
 
   async function addListingToDB() {
