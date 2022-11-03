@@ -6,6 +6,7 @@ import * as ga from "../lib/ga";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -31,7 +32,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
 
-  return <Component {...pageProps} />;
+  return (
+    <>
+      <Component {...pageProps} />
+      <Analytics />
+    </>
+  );
 }
 
 export default MyApp;
